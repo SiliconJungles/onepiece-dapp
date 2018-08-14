@@ -1,0 +1,106 @@
+(* Election *)
+
+(* Associated library *)
+
+library Election
+
+let one_msg =
+  fun (msg : Message) =>
+  let nil_msg = Nil {Message} in
+  Cons {Message} msg nil_msg
+
+let not_owner_code = Int32 1
+let set_success_code = Int32 2
+let duplicate_candidate_code = Int32 3
+
+let first_number = Int32 0
+let incre_number = Int32 1
+
+let ready_insert =
+  fun (bs : Map String Int32) =>
+  fun (_name : String) =>
+  fun (_voteCount : Int32) =>
+    let c = builtin contains bs _name in
+    match c with
+    | False =>
+        let _newCount = builtin add _voteCount first_number in
+        let bs1 = builtin put bs _name _newCount in
+        Some {Map String Int32} bs1
+    | True  => None {Map String Int32}
+    end
+
+let ready_update =
+  fun (bs : Map String Int32) =>
+  fun (_name : String) =>
+    let _crVal = builtin get bs _name in
+    match _crVal with
+    | None => None {Map String Int32}
+    | Some vl =>
+      let _newCount = builtin add vl incre_number in
+      let new_bs = builtin put bs _name _newCount in
+      Some {Map String Int32} new_bs
+    end
+
+contract Election
+(owner: Address)
+
+field elections : Map String Int32 = Emp String Int32
+
+transition setDB (name : String)
+  is_owner = builtin eq owner _sender;
+  match is_owner with
+  | False =>
+    msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : not_owner_code};
+    msgs = one_msg msg;
+    send msgs
+  | True =>
+    bs <- elections;
+    res = ready_insert bs name first_number;
+    match res with
+    | None =>
+      msg  = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : duplicate_candidate_code};
+      msgs = one_msg msg;
+      send msgs
+    | Some bs1 =>
+      elections := bs1;
+      accept;
+      msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : set_success_code};
+      msgs = one_msg msg;
+      send msgs
+    end
+  end
+end
+
+
+transition Vote (name : String)
+  is_owner = builtin eq owner _sender;
+
+  match is_owner with
+  | False =>
+    msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : not_owner_code};
+    msgs = one_msg msg;
+    send msgs
+  | True =>
+    bs <- elections;
+    res = ready_update bs name;
+    match res with
+    | None =>
+      msg  = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : duplicate_candidate_code};
+      msgs = one_msg msg;
+      send msgs
+    | Some new_bs =>
+      elections := new_bs;
+      accept;
+      msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : set_success_code};
+      msgs = one_msg msg;
+      send msgs
+    end
+  end
+end
+
+transition getResult ()
+  r <- elections;
+  msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; msg : r};
+  msgs = one_msg msg;
+  send msgs
+end

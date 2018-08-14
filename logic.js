@@ -78,7 +78,8 @@ module.exports = {
     debug_txn(`Payload Nonce: ${payload.nonce}`)
 
     // check if the payload.nonce is valid
-    if (payload.nonce == userNonce + 1) {
+    if (payload.nonce === userNonce + 1) {
+      console.log("AHHAHAHHA")
       /* contract generation */
       // take the sha256 hash of address+nonce, then extract the rightmost 20 bytes
       let nonceStr = zilliqa_util
@@ -102,7 +103,7 @@ module.exports = {
       walletCtrl.deductFunds(_sender, payload.amount + payload.gasLimit);
       walletCtrl.increaseNonce(_sender); // only increase if a contract is successful
 
-      if (nextAddr.substring(2) != _sender) {
+      if (nextAddr.substring(2) !== _sender) {
         console.log(
           `Contract is calling another address. This is not supported yet.`
         );
@@ -110,7 +111,7 @@ module.exports = {
       }
 
       // Only update if it is a deployment call
-      if (payload.code && payload.to == '0000000000000000000000000000000000000000') {
+      if (payload.code && payload.to === '0000000000000000000000000000000000000000') {
         // Update address_to_contracts DS
         if (_sender in addr_to_contracts) {
           debug_txn("User has contracts. Appending to list");
@@ -128,7 +129,7 @@ module.exports = {
       walletCtrl.deductFunds(_sender, payload.amount + payload.gasLimit);
       debug_txn("Invalid Nonce");
     }
-    
+
     // transtionID is a sha256 digest of txndetails
     testID = Buffer.from(JSON.stringify(payload));
     newTransactionID = sha256.digest(testID).toString("hex");
@@ -173,7 +174,7 @@ module.exports = {
   },
 
   processGetTransaction: data => {
-    if(!data) { 
+    if (!data) {
       debug_txn('Invalid params')
       err = new Error('INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised');
       throw err;
@@ -199,7 +200,7 @@ module.exports = {
 
   processGetSmartContractInit: (data, saveMode) => {
     debug_txn(`Getting SmartContract Init`);
-    if(!data) { 
+    if (!data) {
       debug_txn('Invalid params')
       err = new Error('INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised');
       throw err;
@@ -224,7 +225,7 @@ module.exports = {
 
   processGetSmartContractCode: (data, saveMode) => {
     debug_txn(`Getting SmartContract code`);
-    if(!data) { 
+    if (!data) {
       debug_txn('Invalid params')
       err = new Error('INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised');
       throw err;
@@ -250,7 +251,7 @@ module.exports = {
 
   processGetSmartContractState: (data, saveMode) => {
     debug_txn(`Getting SmartContract State`);
-    if(!data) { 
+    if (!data) {
       debug_txn('Invalid params')
       err = new Error('INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised');
       throw err;
@@ -279,7 +280,7 @@ an account
 */
   processGetSmartContracts: (data, saveMode) => {
 
-    if(!data) { 
+    if (!data) {
       debug_txn('Invalid params')
       err = new Error('INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised');
       throw err;

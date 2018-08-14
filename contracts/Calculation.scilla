@@ -1,0 +1,58 @@
+(* Calculation *)
+
+(* Associated library *)
+
+library Calculation
+
+(* A list of messages *)
+let one_msg =
+  fun (msg : Message) =>
+  let nil_msg = Nil {Message} in
+  Cons {Message} msg nil_msg
+
+let not_owner_code = Int32 401
+let set_success_code = Int32 200
+
+let first = Int32 20
+let second = Int32 10
+
+(* Contract definition *)
+
+contract Calculation
+(owner: Address)
+
+field total : Int32 = Int32 0
+
+transition Calculate (oper : String)
+  is_owner = builtin eq owner _sender;
+  plus_operator = "add";
+  match is_owner with
+  | False =>
+    msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : not_owner_code};
+    msgs = one_msg msg;
+    send msgs
+  | True =>
+    operator = builtin eq oper plus_operator;
+    match operator with
+    | True =>
+      result = builtin add first second;
+      total := result;
+      msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : set_success_code};
+      msgs = one_msg msg;
+      send msgs
+    | False =>
+      result = builtin sub first second;
+      total := result;
+      msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : set_success_code};
+      msgs = one_msg msg;
+      send msgs
+    end
+  end
+end
+
+transition getResult ()
+  r <- total;
+  msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; msg : r};
+  msgs = one_msg msg;
+  send msgs
+end
