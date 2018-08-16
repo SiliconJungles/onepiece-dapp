@@ -14,7 +14,7 @@ This is a small DApp written by Scilla and can able to run on Zilliqa.
 
 - The project requires `Scilla-Runner` to compiling smart contract, so please follow the guide from [Kaya](https://github.com/Zilliqa/kaya#compiling-scilla) repository.
 
-## Deploy the contract to Kaya - RPC Server
+### Deploy the contract to Kaya - RPC Server
 
 - Start Kaya from root directory
 
