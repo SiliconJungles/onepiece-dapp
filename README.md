@@ -1,79 +1,97 @@
-# Kaya - Zilliqa's RPC client for testing and develoment
-[![Gitter chat](http://img.shields.io/badge/chat-on%20gitter-077a8f.svg)](https://gitter.im/Zilliqa/CommunityDev)
+# One Piece Election
 
-Kaya is Zilliqa's RPC server for testing and development. It is personal blockchain which makes developing application easier, faster and safer.
-Kaya simulates the Zilliqa's blockchain behavior, and follows the expected server behavior as seen in the [`zilliqa-js`](https://github.com/Zilliqa/Zilliqa-JavaScript-Library).
+This is a small DApp written by Scilla and can able to run on Zilliqa.
 
-The goal of the project is to support all endpoints in Zilliqa Javascript API, making it easy for app developers to build Dapps on our platform. 
+## Screenshot
 
-Currently, Kaya supports the following functions:
-* `CreateTransaction`
-* `GetTransaction`
-* `GetRecentTransactions`
-* `GetNetworkID`
-* `GetSmartContractState`
-* `GetSmartContracts`
-* `GetBalance`
-* `getSmartContractInit`
-* `getSmartContractCode`
+![Home Page](App-Screen.png)
 
-Functions that are NOT supported:
-* `getDsBlock`
-* `getTxBlock`
-* `getLatestDsBlock`
-* `getLatestTxBlock`
+# How to run
 
-In addition, multi-contract calls are not supported yet.
+## Install dependencies
 
-## Installation
-Run `npm install`, then `node server.js`.
-Debug mode: `DEBUG=kaya* node server.js`.
+- Run `npm install` or `yarn install` for both root and `client` directories.
 
-### Compiling Scilla
+- The project requires `Scilla-Runner` to compiling smart contract, so please follow the guide from [Kaya](https://github.com/Zilliqa/kaya#compiling-scilla) repository.
 
-You will have to compile the binary yourself to run this kaya. 
-At the backend, `Kaya` uses the scilla-runner to interpret `.scilla` files
+## Deploy the contract to Kaya - RPC Server
 
-To compile the binary:
-1. Ensure that you have installed the related dependencies: [INSTALL.md](https://github.com/Zilliqa/scilla/blob/master/INSTALL.md)
-2. Then, run `make clean; make`
-3. Copy the `scilla-runner` from `[SCILLA_DIR]/bin` to `[Kaya_DIR]/components/scilla/`
+- Start Kaya from root directory
 
-## Server Usage
-
-To run the server, type `npm start`. The server listens on port 4200 by default.
-
-By default, the data states are non-persistent. Once you shut down the node server, everything will be deleted.
-To enable persistence data, use:
 ```
-node server.js --save
-```
-The file containing the state will be stored in the `/data` folder. Blockchain-specific information such as transaction logs are stored in `data/save/YYYYMMDDhhmmss_blockchain_states.json`.
-
-You can load the files using:
-```
-node server.js --load data/save/YYYYMMDDhhmmss_blockchain_states.json
+npm start
 ```
 
-## Testing
+- You will see 10 fake ZIL accounts
 
-Testing coverage is primitive;
+```
+Zilliqa kaya Server (ver: 0.0.1)
 
-From `test/scripts/`, you can use run `node DeployContract.js` to test contract deployment. 
-Then, use `node CreateTransaction --key [private-key] --to [contract_addr]` to make transition calls. 
+Available Accounts
+=============================
+(0) 2392675968222e10410634981f9c957afa162000 (Amt: 100000) (Nonce: 0)
+(1) 3497bc187c27ebf52352cc6346fbd52718ff879a (Amt: 100000) (Nonce: 0)
+(2) 6d1eac78cbdf052e8fb44fd8f4c98a7b10625ed8 (Amt: 100000) (Nonce: 0)
+(3) 3986c1a1a05fa821e385e88494db873506f9c5b4 (Amt: 100000) (Nonce: 0)
+(4) 65cc7415ef8513d2d3e0300f115123264e3a7580 (Amt: 100000) (Nonce: 0)
+(5) d20d3a5bb8b5e902e9ec8567419390dfb500ae21 (Amt: 100000) (Nonce: 0)
+(6) a0e3c7f5e77cdf58f01091464f9487a372943e1d (Amt: 100000) (Nonce: 0)
+(7) 0442c36b521e249d324b1da24870cc9900012ba4 (Amt: 100000) (Nonce: 0)
+(8) 047f3fe803af9d406e479b4eec6629386fee5f51 (Amt: 100000) (Nonce: 0)
+(9) ce6550c33c667481c6f7b7424a7996aaa36b6256 (Amt: 100000) (Nonce: 0)
 
-You can use the `curl` commands stated in the [jsonrpc apidocs](https://apidocs.zilliqa.com/#introduction) to test the rest of the functions.
+ Private Keys
+=============================
+(0) 33174fa13b7af445d04e116d0905c4627b6ab1fa771eef6527b5b06f7930d1cf
+(1) 4e833710c6de2ffca449c111ee3ab6819d2887457f0f89c4107f7e15f7c9d1c1
+(2) 3c0badf056e7c07f957b7fb77af7c86ef774dd8084eab1dda64ad5f9d22cdc8e
+(3) 0a68008d87a1cac30290c0e6a80a9d693aefa66b4a8108bc0e01906c3203ed08
+(4) c5a54d7db1099ff9672e93e00def3e8c6c350bf1fc81ab55a1cc17a64b99139a
+(5) 8a3940c4c11f3002882f9b6a820dc6aa57ac530320b82519d55bc3aa0c0d0533
+(6) 73e7a6a09dd2631ca1040f395e44923c1b423c0577141e526b53acaebeee267d
+(7) 6ba86dfa87ce057b264f978bb5e1105e6d463fea24b903683defaf2ab8ba3217
+(8) eaa869314662fb03606f26f411a56ecbe62fec51368bafff6e7eb010464eff4e
+(9) 4ef30435a6b3ec58ba5c13a98f800e57f660699c2183580bd20829a39cad8bc3
 
-Use `--key` to specify a private key. Otherwise, a random privatekey will be generated.
+Server listening on 127.0.0.1:4200
+```
 
-Sample Test Procedure: 
-1. Start the server using `node server.js`
-2. Deploy a contract using `node DeployContract.js --key [private_key].
-3. Check where the contract is deployed. It should be on the logs if you have enabled `debug` mode, otherwise you can check it through the `GetSmartContracts` method.
-4. Send a transaction using `node CreateTransaction.js --key [priate_key] --to [Contract_address]`
+- From 10 accounts above, we will pick the first account to deploy the smart contract and run the transition to init candidates.
 
-Automated tests to be added soon (help appreciated)
+The first account is this case is: 
 
-## License
+```
+Pub key: 2392675968222e10410634981f9c957afa162000
 
-kaya is released under GPLv3. See [license here](https://github.com/Zilliqa/kaya/blob/master/LICENSE)
+Private key: 33174fa13b7af445d04e116d0905c4627b6ab1fa771eef6527b5b06f7930d1cf
+```
+
+Open the `message.json` file in `template` directory and copy the value of pub key to `_sender` attribute
+
+```
+  "_tag": "initCandidates",
+  "_amount": "100",
+  "_sender": "0x2392675968222e10410634981f9c957afa162000",
+```
+
+And then open another terminal console, and run this command to deploy election smart contract.
+
+```
+node src/js/deploy_election.js --key 33174fa13b7af445d04e116d0905c4627b6ab1fa771eef6527b5b06f7930d1cf
+```
+
+Back to the first terminal console, you will see the *Contract Address*
+
+```
+Contract Address Deployed: 1cee26bde67f44f82a250c4dbbc594a0a6a4e790
+```
+
+# Usage
+
+# Note
+
+- This project is forked from [Kaya](https://github.com/Zilliqa/kaya) - Thanks Zilliqa team. Kaya is Zilliqa's RPC server for testing and development. 
+
+- We wrote a smart contract using [Scilla](https://github.com/Zilliqa/scilla). Scilla is a Smart Contract Intermediate Level Language.
+
+- The client app for DApp written by ReactJS.

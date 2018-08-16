@@ -1,7 +1,7 @@
 {
   "_tag": "initCandidates",
   "_amount": "100",
-  "_sender": "0xe5d8db60c8a559d22c6fbc5f7908e5c9a946090f",
+  "_sender": "0x2392675968222e10410634981f9c957afa162000",
   "params": [
     {
       "vname": "candidates",
