@@ -6,9 +6,9 @@ This is a small DApp written by Scilla and can able to run on Zilliqa.
 
 ![Home Page](App-Screen.png)
 
-# How to run
+## How to run
 
-## Install dependencies
+### Install dependencies
 
 - Run `npm install` or `yarn install` for both root and `client` directories.
 
@@ -86,9 +86,29 @@ Back to the first terminal console, you will see the *Contract Address*
 Contract Address Deployed: 1cee26bde67f44f82a250c4dbbc594a0a6a4e790
 ```
 
-# Usage
+## Usage
 
-# Note
+- Go to `client` directory, and open `CandidatesContainer.js` file, set the *Contract Address* value to `const smartContractAddreses`.
+
+```javascript
+const smartContractAddreses = "1cee26bde67f44f82a250c4dbbc594a0a6a4e790"
+```
+
+- From `client` directory, start the client server
+
+```
+yarn start
+```
+
+- Tada, now you will see a list of candidates.
+
+### Let's vote for the candidate
+
+- Copy fake account's private addresses to `Your Wallet Address` input field and then click to VOTE button for the candidate you want to vote. Voila! It works!
+
+- Base on the election contract, one account can only vote once.
+
+## Note
 
 - This project is forked from [Kaya](https://github.com/Zilliqa/kaya) - Thanks Zilliqa team. Kaya is Zilliqa's RPC server for testing and development. 
 

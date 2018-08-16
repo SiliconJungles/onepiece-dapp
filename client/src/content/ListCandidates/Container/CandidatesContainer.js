@@ -18,7 +18,7 @@ const zilliqa = new Zilliqa({
 
 const node = zilliqa.getNode()
 
-const smartContractAddreses = "a8bbfb7ea457e3e82fda4c36bc974515270d8c74"
+const smartContractAddreses = "1cee26bde67f44f82a250c4dbbc594a0a6a4e790"
 
 const zilliqaCallback = (err, data) => {
   if (err || data.error) {
