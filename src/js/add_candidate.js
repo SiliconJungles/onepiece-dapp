@@ -43,14 +43,14 @@ console.log(`Connected to ${url}`);
 
 // the immutable initialisation variables
 let msg = {
-  "_tag": "setDB",
+  "_tag": "insertCandidate",
   "_amount": "100",
   "_sender": "0x1234567890123456789012345678901234567890",
   "params": [
     {
       "vname": "name",
       "type": "String",
-      "value": "Jane"
+      "value": "Kaido"
     }
   ]
 };

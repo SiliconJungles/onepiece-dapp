@@ -37,11 +37,13 @@ console.log(`Connected to ${url}`);
 
 var code = fs.readFileSync('contracts/Election.scilla', 'utf-8');
 
+// "value": "0x1234567890123456789012345678901234567890"
+
 let initParams = [
   {
     "vname": "owner",
     "type": "Address",
-    "value": "0x1234567890123456789012345678901234567890"
+    "value": `0x${address}`
   },
   {
     "vname": "_creation_block",

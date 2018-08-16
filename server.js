@@ -18,6 +18,7 @@
 
 
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const debug_server = require('debug')('kaya:server');
 const port = 4200;
@@ -30,6 +31,7 @@ let argv = require('yargs').argv;
 var rimraf = require('rimraf');
 const utilities = require('./utilities');
 app.use(bodyParser.json({ extended: false }));
+app.use(cors());
 
 var isPersistence = false; // tmp is the default behavior
 function makeResponse(id, jsonrpc, data, isErr) {

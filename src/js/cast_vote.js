@@ -43,14 +43,14 @@ console.log(`Connected to ${url}`);
 
 // the immutable initialisation variables
 let msg = {
-  "_tag": "Vote",
+  "_tag": "castVote",
   "_amount": "100",
   "_sender": "0x1234567890123456789012345678901234567890",
   "params": [
     {
       "vname": "name",
       "type": "String",
-      "value": "Jane"
+      "value": "Donquixote Doflamingo"
     }
   ]
 };
@@ -58,7 +58,7 @@ let msg = {
 // transaction details
 let txnDetails = {
   version: 0,
-  nonce: 3,
+  nonce: 1, // increment by 1 from the last transaction's nonce
   to: argv.to,
   amount: 0,
   gasPrice: 1,

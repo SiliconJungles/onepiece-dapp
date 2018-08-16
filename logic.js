@@ -78,8 +78,11 @@ module.exports = {
     debug_txn(`Payload Nonce: ${payload.nonce}`)
 
     // check if the payload.nonce is valid
+    console.log("PAYLOAD NONCE", payload.nonce)
+    console.log("USER NONCE", userNonce)
+    console.log("SENDER", _sender)
     if (payload.nonce === userNonce + 1) {
-      console.log("AHHAHAHHA")
+      console.log("IN NONCE")
       /* contract generation */
       // take the sha256 hash of address+nonce, then extract the rightmost 20 bytes
       let nonceStr = zilliqa_util

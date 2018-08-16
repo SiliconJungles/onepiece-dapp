@@ -1,12 +1,45 @@
 {
-  "_tag": "setDB",
+  "_tag": "initCandidates",
   "_amount": "100",
-  "_sender": "0x1234567890123456789012345678901234567890",
+  "_sender": "0xe5d8db60c8a559d22c6fbc5f7908e5c9a946090f",
   "params": [
     {
-      "vname": "name",
-      "type": "String",
-      "value": "John"
-    }
+      "vname": "candidates",
+      "type": "Map (String) (Int32)",
+      "value": [
+        {
+          "key":"Monkey D. Luffy",
+          "val":"0"
+        },
+        {
+          "key":"Pirate Hunter - Roronoa Zoro",
+          "val":"0"
+        },
+        {
+          "key":"Dracule Mihawk",
+          "val":"0"
+        },
+        {
+          "key":"Charlotte Katakuri",
+          "val":"0"
+        },
+        {
+          "key":"Red Hair - Shanks",
+          "val":"0"
+        },
+        {
+          "key":"Silvers Rayleigh",
+          "val":"0"
+        },
+        {
+          "key":"Donquixote Doflamingo",
+          "val":"0"
+        },
+        {
+          "key":"Monkey D. Garp",
+          "val":"0"
+        }
+      ]
+    } 
   ]
 }

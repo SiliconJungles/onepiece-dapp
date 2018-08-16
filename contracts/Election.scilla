@@ -12,41 +12,45 @@ let one_msg =
 let not_owner_code = Int32 1
 let set_success_code = Int32 2
 let duplicate_candidate_code = Int32 3
+let already_vote_code = Int32 4
 
-let first_number = Int32 0
+let init_vote_count = Int32 0
 let incre_number = Int32 1
+let init_voter = True
 
-let ready_insert =
-  fun (bs : Map String Int32) =>
+let insert_candidate =
+  fun (candidates : Map String Int32) =>
   fun (_name : String) =>
-  fun (_voteCount : Int32) =>
-    let c = builtin contains bs _name in
+    let c = builtin contains candidates _name in
     match c with
     | False =>
-        let _newCount = builtin add _voteCount first_number in
-        let bs1 = builtin put bs _name _newCount in
-        Some {Map String Int32} bs1
+        let new_candidate = builtin put candidates _name init_vote_count in
+        Some {Map String Int32} new_candidate
     | True  => None {Map String Int32}
     end
 
-let ready_update =
-  fun (bs : Map String Int32) =>
+let incre_vote_count =
+  fun (candidates : Map String Int32) =>
   fun (_name : String) =>
-    let _crVal = builtin get bs _name in
-    match _crVal with
+    let candidate = builtin get candidates _name in
+    match candidate with
     | None => None {Map String Int32}
     | Some vl =>
       let _newCount = builtin add vl incre_number in
-      let new_bs = builtin put bs _name _newCount in
-      Some {Map String Int32} new_bs
+      let new_candidate = builtin put candidates _name _newCount in
+      Some {Map String Int32} new_candidate
     end
+
+
 
 contract Election
 (owner: Address)
 
 field elections : Map String Int32 = Emp String Int32
+field voters : Map Address Bool = Emp Address Bool
 
-transition setDB (name : String)
+(*When want to insert a missing candidate*)
+transition insertCandidate (name : String)
   is_owner = builtin eq owner _sender;
   match is_owner with
   | False =>
@@ -54,15 +58,15 @@ transition setDB (name : String)
     msgs = one_msg msg;
     send msgs
   | True =>
-    bs <- elections;
-    res = ready_insert bs name first_number;
+    candidates <- elections;
+    res = insert_candidate candidates name;
     match res with
     | None =>
       msg  = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : duplicate_candidate_code};
       msgs = one_msg msg;
       send msgs
-    | Some bs1 =>
-      elections := bs1;
+    | Some new_candidate =>
+      elections := new_candidate;
       accept;
       msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : set_success_code};
       msgs = one_msg msg;
@@ -71,36 +75,55 @@ transition setDB (name : String)
   end
 end
 
-
-transition Vote (name : String)
+(*Init list of candidates when deploying contract*)
+transition initCandidates (candidates : Map String Int32)
   is_owner = builtin eq owner _sender;
-
   match is_owner with
   | False =>
     msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : not_owner_code};
     msgs = one_msg msg;
     send msgs
   | True =>
-    bs <- elections;
-    res = ready_update bs name;
+    elections := candidates;
+    accept;
+    msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : set_success_code};
+    msgs = one_msg msg;
+    send msgs
+  end
+end
+
+(*Vote to a candidate*)
+transition castVote (name : String)
+  candidates <- elections;
+  vos <- voters;
+  exist_address = builtin contains vos _sender;
+  match exist_address with
+  | False =>
+    res = incre_vote_count candidates name;
+    new_vos = builtin put vos _sender init_voter;
     match res with
     | None =>
       msg  = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : duplicate_candidate_code};
       msgs = one_msg msg;
       send msgs
-    | Some new_bs =>
-      elections := new_bs;
+    | Some new_candidate =>
+      elections := new_candidate;
+      voters := new_vos;
       accept;
       msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : set_success_code};
       msgs = one_msg msg;
       send msgs
     end
+  | True =>
+    msg  = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; code : already_vote_code};
+    msgs = one_msg msg;
+    send msgs
   end
 end
 
-transition getResult ()
-  r <- elections;
-  msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; msg : r};
-  msgs = one_msg msg;
-  send msgs
-end
+(*transition getResult ()*)
+(*  r <- elections;*)
+(* msg = {_tag : "Main"; _recipient : _sender; _amount : Uint128 0; msg : r};*)
+(*  msgs = one_msg msg;*)
+(*  send msgs*)
+(*end*)
