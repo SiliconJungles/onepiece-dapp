@@ -8,6 +8,7 @@
     "bcrypto": "^1.0.0",
     "body-parser": "^1.18.3",
     "debug": "^3.1.0",
+    "dotenv": "^6.0.0",
     "lodash": "^4.17.10",
     "node-fs": "^0.1.7",
     "react": "^16.4.2",

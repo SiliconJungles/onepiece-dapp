@@ -41,8 +41,6 @@ let incre_vote_count =
       Some {Map String Int32} new_candidate
     end
 
-
-
 contract Election
 (owner: Address)
 

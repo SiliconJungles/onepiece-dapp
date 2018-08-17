@@ -1,33 +1,14 @@
-import React from 'react';
-import { compose, withState, lifecycle, withHandlers } from 'recompose';
-import Badge from '@material-ui/core/Badge';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import { Zilliqa } from 'zilliqa-js';
-import _ from 'lodash';
-
-const URL = 'http://localhost:4200'
-
-const zilliqa = new Zilliqa({
-  nodeUrl: URL
-})
-
-const node = zilliqa.getNode()
-
-const smartContractAddreses = "1cee26bde67f44f82a250c4dbbc594a0a6a4e790"
-
-const zilliqaCallback = (err, data) => {
-  if (err || data.error) {
-    console.log(err)
-  } else {
-    console.log(data)
-    window.location.reload()
-  }
-}
+import React from 'react'
+import Badge from '@material-ui/core/Badge'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import _ from 'lodash'
+import { zilliqa, zilliqaNode, smartContractAddreses, zilliqaCallback } from '../../../helper.js'
+import { compose, withState, lifecycle, withHandlers } from 'recompose'
 
 const CandidatesContainer = (props) => {
   const { cards, classes, walletAddress, castVote } = props
@@ -58,6 +39,7 @@ const enhance = compose(
       try {
         const address = zilliqa.util.getAddressFromPrivateKey(walletAddress)
         console.log('Address', address.toString('hex'))
+        console.log('SmartContract Address', smartContractAddreses)
 
         const msg = {
           "_tag": "castVote",
@@ -84,9 +66,17 @@ const enhance = compose(
 
         const txn = zilliqa.util.createTransactionJson(walletAddress, txnDetails)
 
-        node.createTransaction(txn, zilliqaCallback);
+        zilliqaNode.createTransaction(txn, (err, data) => {
+          if (err || data.error) {
+            console.log(err)
+          } else {
+            console.log(data)
+            window.location.reload()
+          }
+        })
       }
       catch(err) {
+        console.log(err)
         alert("Your Private Key is not correct!")
       }
     }
@@ -94,12 +84,11 @@ const enhance = compose(
   lifecycle({
     componentDidMount() {
       const { setCards } = this.props
-      node.getSmartContractState({ address: smartContractAddreses }, function (err, data) {
+      zilliqaNode.getSmartContractState({ address: smartContractAddreses }, function (err, data) {
         if (err || (data.result && data.result.Error)) {
           console.log('err')
         } else {
           const result = JSON.stringify(data.result)
-          console.log(result)
           const elections = _.filter(JSON.parse(result), (el) => el.vname === "elections")[0].value
           setCards(elections)
         }

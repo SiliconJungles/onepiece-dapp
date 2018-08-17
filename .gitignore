@@ -76,3 +76,6 @@ typings/
 tmp/
 data/
 *scilla-runner
+
+# Environment variable file
+client/.env

@@ -88,13 +88,23 @@ Contract Address Deployed: 1cee26bde67f44f82a250c4dbbc594a0a6a4e790
 
 ## Usage
 
-- Go to `client` directory, and open `CandidatesContainer.js` file, set the *Contract Address* value to `const smartContractAddreses`.
+- Go to `client` directory, create a new `.env` file
 
-```javascript
-const smartContractAddreses = "1cee26bde67f44f82a250c4dbbc594a0a6a4e790"
+```
+cp .env.sample .env
 ```
 
-- From `client` directory, start the client server
+And then set the *Contract Address* value for `REACT_APP_SMART_CONTRACT_ADDRESS` environment variable.
+
+
+```
+# .env
+
+REACT_APP_SMART_CONTRACT_ADDRESS="dd08f7888e538b1df1abe34bde5b1cdb71a27805"
+REACT_APP_KAYA_RPC_SERVER="http://localhost:4200"
+```
+
+- Start the client server from `client` directory
 
 ```
 yarn start
