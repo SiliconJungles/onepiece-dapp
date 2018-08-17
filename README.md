@@ -114,7 +114,7 @@ yarn start
 
 ### Let's vote for the candidate
 
-- Copy fake account's private addresses to `Your Private Key` input field and then click to VOTE button for the candidate you want to vote. Voila! It works!
+- Copy fake account's private key to `Your Private Key` input field and then click to VOTE button for the candidate you want to vote. Voila! It works!
 
 - Base on the election contract, one account can only vote once.
 
