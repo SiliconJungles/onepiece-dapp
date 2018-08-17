@@ -61,12 +61,12 @@ Server listening on 127.0.0.1:4200
 The first account is this case is: 
 
 ```
-Pub key: 2392675968222e10410634981f9c957afa162000
+Account key: 2392675968222e10410634981f9c957afa162000
 
 Private key: 33174fa13b7af445d04e116d0905c4627b6ab1fa771eef6527b5b06f7930d1cf
 ```
 
-Open the `message.json` file in `template` directory and copy the value of pub key to `_sender` attribute
+Open the `message.json` file in `template` directory and copy the value of account key to `_sender` attribute
 
 ```
   "_tag": "initCandidates",
@@ -104,7 +104,7 @@ yarn start
 
 ### Let's vote for the candidate
 
-- Copy fake account's private addresses to `Your Wallet Address` input field and then click to VOTE button for the candidate you want to vote. Voila! It works!
+- Copy fake account's private addresses to `Your Private Key` input field and then click to VOTE button for the candidate you want to vote. Voila! It works!
 
 - Base on the election contract, one account can only vote once.
 

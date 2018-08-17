@@ -105,7 +105,7 @@ const Layout = (props) => {
                     <form noValidate autoComplete="off">
                       <TextField
                         id="wallet_address"
-                        label="Your Wallet Address"
+                        label="Your Private Key"
                         value={walletAddress}
                         onChange={(event) => setWalletAddress(event.target.value)}
                         className={classes.textField}

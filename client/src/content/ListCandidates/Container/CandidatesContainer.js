@@ -87,7 +87,7 @@ const enhance = compose(
         node.createTransaction(txn, zilliqaCallback);
       }
       catch(err) {
-        alert("Your Wallet Address is not correct!")
+        alert("Your Private Key is not correct!")
       }
     }
   }),
