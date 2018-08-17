@@ -100,7 +100,7 @@ And then set the *Contract Address* value for `REACT_APP_SMART_CONTRACT_ADDRESS`
 ```
 # .env
 
-REACT_APP_SMART_CONTRACT_ADDRESS="dd08f7888e538b1df1abe34bde5b1cdb71a27805"
+REACT_APP_SMART_CONTRACT_ADDRESS="1cee26bde67f44f82a250c4dbbc594a0a6a4e790"
 REACT_APP_KAYA_RPC_SERVER="http://localhost:4200"
 ```
 
