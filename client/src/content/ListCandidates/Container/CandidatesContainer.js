@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import _ from 'lodash'
-import { zilliqa, zilliqaNode, smartContractAddreses, zilliqaCallback } from '../../../helper.js'
+import { zilliqa, zilliqaNode, smartContractAddreses } from '../../../helper.js'
 import { compose, withState, lifecycle, withHandlers } from 'recompose'
 
 const CandidatesContainer = (props) => {
