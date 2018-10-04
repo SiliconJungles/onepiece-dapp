@@ -7,6 +7,7 @@
     "@material-ui/icons": "^2.0.2",
     "bcrypto": "^1.0.0",
     "body-parser": "^1.18.3",
+    "bn.js": "^4.11.8",
     "debug": "^3.1.0",
     "dotenv": "^6.0.0",
     "lodash": "^4.17.10",
@@ -17,7 +18,7 @@
     "recompose": "^0.28.2",
     "rimraf": "^2.6.2",
     "yargs": "^12.0.1",
-    "zilliqa-js": "^0.0.2"
+    "zilliqa-js": "^0.1.19"
   },
   "scripts": {
     "start": "react-scripts start",

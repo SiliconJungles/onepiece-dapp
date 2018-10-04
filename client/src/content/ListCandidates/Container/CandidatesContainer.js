@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import _ from 'lodash'
+import BN from 'bn.js'
 import { zilliqa, zilliqaNode, smartContractAddreses } from '../../../helper.js'
 import { compose, withState, lifecycle, withHandlers } from 'recompose'
 
@@ -19,11 +20,11 @@ const CandidatesContainer = (props) => {
           <Card>
             <CardContent>
               <Badge color={card.val > 0 ? "secondary" : "primary"} badgeContent={card.val} className={classes.margin}>
-                <Typography variant="display1"  className={classes.padding}>{card.key}</Typography>
+                <Typography variant="display1" className={classes.padding}>{card.key}</Typography>
               </Badge>
             </CardContent>
             <CardActions>
-              <Button disabled={walletAddress ? false : true}fullWidth={true} size="small" variant="contained" color="primary" onClick={() => castVote(walletAddress, card.key)}>VOTE</Button>
+              <Button disabled={walletAddress ? false : true} fullWidth={true} size="small" variant="contained" color="primary" onClick={() => castVote(walletAddress, card.key)}>VOTE</Button>
             </CardActions>
           </Card>
         </Grid>
@@ -41,41 +42,52 @@ const enhance = compose(
         console.log('Address', address.toString('hex'))
         console.log('SmartContract Address', smartContractAddreses)
 
-        const msg = {
-          "_tag": "castVote",
-          "_amount": "100",
-          "_sender": `0x${address}`,
-          "params": [
-            {
-              "vname": "name",
-              "type": "String",
-              "value": candidate
-            }
-          ]
-        }
-
-        const txnDetails = {
-          version: 0,
-          nonce: 1, // increment by 1 from the last transaction's nonce
-          to: smartContractAddreses,
-          amount: 0,
-          gasPrice: 1,
-          gasLimit: 10,
-          data: JSON.stringify(msg).replace(/\\"/g, '"')
-        }
-
-        const txn = zilliqa.util.createTransactionJson(walletAddress, txnDetails)
-
-        zilliqaNode.createTransaction(txn, (err, data) => {
-          if (err || data.error) {
-            console.log(err)
+        zilliqaNode.getBalance({ address }, (err, data) => {
+          if (err || (data.result && data.result.Error)) {
+            console.log(err);
+            console.log(data.result);
           } else {
-            console.log(data)
-            window.location.reload()
+            const { nonce } = data.result;
+
+            const newNonce = nonce + 1;
+
+            const msg = {
+              _tag: "castVote",
+              _amount: "0",
+              _sender: `0x${address}`,
+              params: [
+                {
+                  vname: "name",
+                  type: "String",
+                  value: candidate
+                }
+              ]
+            }
+
+            const txnDetails = {
+              version: 0,
+              nonce: newNonce, // increment by 1 from the last transaction's nonce
+              to: smartContractAddreses,
+              amount: new BN(0),
+              gasPrice: 1,
+              gasLimit: 2000,
+              data: JSON.stringify(msg).replace(/\\"/g, '"')
+            }
+
+            const txn = zilliqa.util.createTransactionJson(walletAddress, txnDetails)
+
+            zilliqaNode.createTransaction(txn, (err, data) => {
+              if (err || data.error) {
+                console.log(err)
+              } else {
+                console.log(data)
+                window.location.reload()
+              }
+            })
           }
         })
       }
-      catch(err) {
+      catch (err) {
         console.log(err)
         alert("Your Private Key is not correct!")
       }

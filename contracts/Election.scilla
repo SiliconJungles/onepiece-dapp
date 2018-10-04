@@ -42,10 +42,10 @@ let incre_vote_count =
     end
 
 contract Election
-(owner: Address)
+(owner: ByStr20)
 
 field elections : Map String Int32 = Emp String Int32
-field voters : Map Address Bool = Emp Address Bool
+field voters : Map ByStr20 Bool = Emp ByStr20 Bool
 
 (*When want to insert a missing candidate*)
 transition insertCandidate (name : String)

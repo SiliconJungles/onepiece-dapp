@@ -1,27 +1,29 @@
-let { Zilliqa } = require('zilliqa-js');
-let fs = require('fs');
-let argv = require('yargs').argv;
-let colors = require('colors');
+require('isomorphic-fetch');
 
-let url = 'http://localhost:4200'
-let zilliqa = new Zilliqa({
-  nodeUrl: url
-})
+const { Zilliqa } = require('zilliqa-js');
+const BN = require('bn.js');
 
-let privateKey, address;
+const fs = require('fs');
+const argv = require('yargs').argv;
+const colors = require('colors');
 
-if (argv.key) {
-  privateKey = argv.key;
-  console.log(`Your Private Key: ${privateKey} \n`);
-} else {
+const url = 'http://localhost:4200';
+
+const zilliqa = new Zilliqa({
+  nodeUrl: url,
+});
+
+if (!argv.key) {
   console.log('Private key is required');
   process.exit(0);
 }
 
-address = zilliqa.util.getAddressFromPrivateKey(privateKey);
+const privateKey = argv.key;
 
-let node = zilliqa.getNode();
-console.log(`Address: ${address}`);
+const address = zilliqa.util.getAddressFromPrivateKey(privateKey);
+
+const node = zilliqa.getNode();
+
 
 function callback(err, data) {
   if (err || data.error) {
@@ -35,39 +37,38 @@ function callback(err, data) {
 console.log('Zilliqa Testing Script'.bold.cyan);
 console.log(`Connected to ${url}`);
 
-var code = fs.readFileSync('contracts/Election.scilla', 'utf-8');
+const code = fs.readFileSync('contracts/Election.scilla', 'utf-8');
 
 // "value": "0x1234567890123456789012345678901234567890"
 
-let initParams = [
+const initParams = [
   {
-    "vname": "owner",
-    "type": "Address",
-    "value": `0x${address}`
+    vname: 'owner',
+    type: 'ByStr20',
+    value: `0x${address}`,
   },
   {
-    "vname": "_creation_block",
-    "type": "BNum",
-    "value": "1"
+    vname: '_creation_block',
+    type: 'BNum',
+    value: '1',
   },
 ];
 
 // transaction details
-let txnDetails = {
+const txnDetails = {
   version: 0,
   nonce: 1,
   to: '0000000000000000000000000000000000000000',
-  amount: 0,
+  amount: new BN(0),
   gasPrice: 1,
-  gasLimit: 50,
-  code: code,
-  data: JSON.stringify(initParams).replace(/\\"/g, '"')
+  gasLimit: 2000,
+  code,
+  data: JSON.stringify(initParams).replace(/\\"/g, '"'),
 };
 
 console.log(initParams);
 // sign the transaction using util methods
-let txn = zilliqa.util.createTransactionJson(privateKey, txnDetails);
+const txn = zilliqa.util.createTransactionJson(privateKey, txnDetails);
 
 // send the transaction to the node
 node.createTransaction(txn, callback);
-

@@ -12,7 +12,7 @@ This is a small DApp written by Scilla and can able to run on Zilliqa.
 
 - Run `npm install` or `yarn install` for both root and `client` directories.
 
-- The project requires `Scilla-Runner` to compiling smart contract, so please follow the guide from [Kaya](https://github.com/Zilliqa/kaya#compiling-scilla) repository.
+- The project requires `Scilla-Runner` to compiling smart contract, so please follow the guide from [Kaya](https://github.com/Zilliqa/kaya#compiling-scilla) repository. Or you can use my runner file. I already compiled.
 
 ### Deploy the contract to Kaya - RPC Server
 
@@ -56,34 +56,22 @@ Available Accounts
 Server listening on 127.0.0.1:4200
 ```
 
-- From 10 accounts above, we will pick the first account to deploy the smart contract and run the transition to init candidates.
-
-The first account is this case is: 
-
-```
-Account key: 2392675968222e10410634981f9c957afa162000
-
-Private key: 33174fa13b7af445d04e116d0905c4627b6ab1fa771eef6527b5b06f7930d1cf
-```
-
-Open the `message.json` file in `template` directory and copy the value of account key to `_sender` attribute
-
-```
-  "_tag": "initCandidates",
-  "_amount": "100",
-  "_sender": "0x2392675968222e10410634981f9c957afa162000",
-```
-
-And then open another terminal console, and run this command to deploy election smart contract.
+- Open another terminal console, and run this command to deploy election smart contract.
 
 ```
 node src/js/deploy_election.js --key 33174fa13b7af445d04e116d0905c4627b6ab1fa771eef6527b5b06f7930d1cf
 ```
 
-Back to the first terminal console, you will see the *Contract Address*
+- And then you will see the smart contract address from the first terminal
 
 ```
 Contract Address Deployed: 1cee26bde67f44f82a250c4dbbc594a0a6a4e790
+```
+
+- From the second terminal, let's init list of candidates
+
+```
+node src/js/init_candidates.js --key 33174fa13b7af445d04e116d0905c4627b6ab1fa771eef6527b5b06f7930d1cf --to 1cee26bde67f44f82a250c4dbbc594a0a6a4e790
 ```
 
 ## Usage
@@ -120,7 +108,7 @@ yarn start
 
 ## Note
 
-- This project is forked from [Kaya](https://github.com/Zilliqa/kaya) - Thanks Zilliqa team. Kaya is Zilliqa's RPC server for testing and development. 
+- This project is forked from [Kaya](https://github.com/Zilliqa/kaya) - Thanks Zilliqa team. Kaya is Zilliqa's RPC server for testing and development.
 
 - We wrote a smart contract using [Scilla](https://github.com/Zilliqa/scilla). Scilla is a Smart Contract Intermediate Level Language.
 
